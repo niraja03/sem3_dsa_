@@ -1,0 +1,35 @@
+# Store roll numbers in a list (random order)
+roll_numbers = [61,62,63,64,65,66] #sq bracket bcoz py uses list & in c++ we use curly braces
+
+
+# Linear Search Function
+def linear_search(rolls, key):
+    for num in rolls:
+        if num == key:
+            return True
+    return False
+
+#Sentinel Search Function
+def sentinel_search(rolls, key):
+    n = len(rolls)
+    rolls.append(key)  # Add key at the end as sentinel
+    i = 0
+    while rolls[i] != key:
+        i += 1
+    rolls.pop()  # Remove sentinel
+    return i < n  # If found before last index, it's present
+
+#User Input & Result
+search_roll = int(input("Enter roll number to search: "))
+
+# Using Linear Search
+if linear_search(roll_numbers, search_roll):
+    print("Student attended (done by Linear Search)")
+else:
+    print("Student did NOT attend (done by Linear Search)")
+
+# Using Sentinel Search
+if sentinel_search(roll_numbers.copy(), search_roll):  # use copy to avoid changing original list
+    print("Student attended (Sentinel Search)")
+else:
+    print("Student did NOT attend (Sentinel Search)")
