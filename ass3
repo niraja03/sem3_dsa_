@@ -1,0 +1,58 @@
+def binary_search(arr, x):
+    # Start with the full range of the array: indices 0..len(arr)-1
+    low, high = 0, len(arr) - 1
+
+    while low <= high:                   # keep searching while the window is valid
+        mid = (low + high) // 2          # middle index (integer division)
+        if arr[mid] == x:                # found the target at mid
+            return True
+        elif arr[mid] < x:               # target is on the right half
+            low = mid + 1
+        else:                            # target is on the left half
+            high = mid - 1
+
+    return False                         # ran out of range → not found
+
+
+def fibonacci_search(arr, x):
+    n = len(arr)
+
+    # Build up Fibonacci numbers until one is >= n
+    fibMMm2 = 0                          # F(m-2)
+    fibMMm1 = 1                          # F(m-1)
+    fibM = fibMMm2 + fibMMm1             # F(m)
+
+    while fibM < n:                      # find smallest F(m) >= n
+        fibMMm2 = fibMMm1
+        fibMMm1 = fibM
+        fibM = fibMMm2 + fibMMm1
+
+    offset = -1                          # no elements eliminated from front yet
+
+    while fibM > 1:                      # while there are elements to inspect
+        i = min(offset + fibMMm2, n - 1) # probe index using F(m-2) step
+        if arr[i] < x:                   # move window right
+            fibM = fibMMm1
+            fibMMm1 = fibMMm2
+            fibMMm2 = fibM - fibMMm1
+            offset = i                   # we eliminated up to i
+        elif arr[i] > x:                 # move window left
+            fibM = fibMMm2
+            fibMMm1 = fibMMm1 - fibMMm2
+            fibMMm2 = fibM - fibMMm1
+        else:
+            return True                  # found
+
+    # Check the last possible element
+    if fibMMm1 and offset + 1 < n and arr[offset + 1] == x:
+        return True
+
+    return False
+
+
+# Your data
+students = [101, 103, 105, 108, 110, 115]
+student = 110
+
+print("Binary Search:", "Found" if binary_search(students, student) else "Not Found")
+print("Fibonacci Search:", "Found" if fibonacci_search(students, student) else "Not Found")
