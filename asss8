@@ -1,0 +1,45 @@
+#include <iostream>
+using namespace std;
+
+#define MAX 100
+
+class UndoRedo {
+    string undoStack[MAX];
+    string redoStack[MAX];
+    int topUndo = -1;
+    int topRedo = -1;
+
+public:
+    void addOperation(string op) {
+        undoStack[++topUndo] = op; // push to undo
+        topRedo = -1;              // clear redo
+        cout << "Added: " << op << endl;
+    }
+
+    void undo() {
+        if (topUndo < 0) { cout << "Nothing to undo\n"; return; }
+        string op = undoStack[topUndo--]; // pop from undo
+        redoStack[++topRedo] = op;        // push to redo
+        cout << "Undo: " << op << endl;
+    }
+
+    void redo() {
+        if (topRedo < 0) { cout << "Nothing to redo\n"; return; }
+        string op = redoStack[topRedo--]; // pop from redo
+        undoStack[++topUndo] = op;        // push back to undo
+        cout << "Redo: " << op << endl;
+    }
+};
+
+int main() {
+    UndoRedo editor;
+
+    editor.addOperation("Type A");
+    editor.addOperation("Type B");
+    editor.undo(); // Undo B
+    editor.redo(); // Redo B
+    editor.addOperation("Type C"); // clears redo
+    editor.undo(); // Undo C
+
+    return 0;
+}
