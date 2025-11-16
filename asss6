@@ -1,0 +1,47 @@
+# take input
+data = input("Enter percentages: ").split()
+
+# convert to float and store in array
+arr = []
+for x in data:
+    arr.append(float(x))
+
+
+# quick sort function
+def quick(a, low, high):
+    if low < high:
+        p = part(a, low, high)
+        quick(a, low, p - 1)
+        quick(a, p + 1, high)
+
+
+# partition logic
+def part(a, low, high):
+    pivot = a[high]
+    i = low - 1
+
+    for j in range(low, high):
+        if a[j] <= pivot:
+            i += 1
+            a[i], a[j] = a[j], a[i]
+
+    a[i + 1], a[high] = a[high], a[i + 1]
+    return i + 1
+
+
+# run quick sort
+quick(arr, 0, len(arr) - 1)
+
+print("Sorted Percentages:", arr)
+
+# display top 5 scores
+top = []
+i = len(arr) - 1
+count = 0
+
+while i >= 0 and count < 5:
+    top.append(arr[i])
+    i -= 1
+    count += 1
+
+print("Top Five Scores:", top)
