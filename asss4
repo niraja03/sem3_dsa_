@@ -1,25 +1,33 @@
-# input
-arr = list(map(int, input("Enter roll numbers: ").split()))
-arr.sort()
+rolls_input = input("Enter roll numbers: ")  
+rolls_str_list = rolls_input.split()      
 
-key = int(input("Enter roll number to search: "))
+rolls = []                                 
+for item in rolls_str_list:                
+    rolls.append(int(item))               
 
-# binary search
-def binary(a, k):
+rolls.sort()
+
+x = int(input("Enter roll number to search: "))
+
+
+def binary(a, x):
     left = 0
     right = len(a) - 1
+
     while left <= right:
         mid = (left + right) // 2
-        if a[mid] == k:
+
+        if a[mid] == x:
             return True
-        if a[mid] < k:
+        if a[mid] < x:
             left = mid + 1
         else:
             right = mid - 1
+
     return False
 
-# fibonacci search
-def fibo(a, k):
+
+def fib_search(a, x):
     n = len(a)
     f2 = 0
     f1 = 1
@@ -37,13 +45,13 @@ def fibo(a, k):
         if i >= n:
             i = n - 1
 
-        if a[i] < k:
+        if a[i] < x:
             f = f1
             f1 = f2
             f2 = f - f1
             offset = i
 
-        elif a[i] > k:
+        elif a[i] > x:
             f = f2
             f1 = f1 - f2
             f2 = f - f1
@@ -51,10 +59,11 @@ def fibo(a, k):
         else:
             return True
 
-    if f1 == 1 and offset + 1 < n and a[offset + 1] == k:
+    if f1 == 1 and offset + 1 < n and a[offset + 1] == x:
         return True
 
     return False
 
-print("Binary Search:", "Found" if binary(arr, key) else "Not Found")
-print("Fibonacci Search:", "Found" if fibo(arr, key) else "Not Found")
+
+print("Binary Search:", "Found" if binary(rolls, x) else "Not Found")
+print("Fibonacci Search:", "Found" if fib_search(rolls, x) else "Not Found")
