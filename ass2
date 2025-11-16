@@ -1,4 +1,4 @@
-def input_roll_numbers():
+def input_roll_numbers(): 
     roll_numbers = []
     n = int(input("Enter number of students who attended the training: "))
     for i in range(n):
