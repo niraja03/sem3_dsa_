@@ -1,0 +1,27 @@
+#include <iostream>
+using namespace std;
+
+#define MAX 100
+int queue[MAX], front = 0, rear = 0;
+
+void addJob(int job) {
+    if (rear == MAX) { cout << "Queue full!" << endl; return; }
+    queue[rear++] = job;
+    cout << "Job Added: " << job << endl;
+}
+
+void deleteJob() {
+    if (front == rear) { cout << "Queue empty!" << endl; return; }
+    cout << "Deleted: " << queue[front++] << endl;
+}
+
+int main() {
+    int choice, job;
+    while (true) {
+        cout << "\n 1.Add Job \n 2.Delete action \n 3.Exit action \n Enter your Choice from this : ";
+        cin >> choice;
+        if (choice == 1) { cout << "Enter Job ID: "; cin >> job; addJob(job); }
+        else if (choice == 2) deleteJob();
+        else break;
+    }
+}
