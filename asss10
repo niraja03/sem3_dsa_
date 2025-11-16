@@ -1,0 +1,50 @@
+#include <iostream>
+using namespace std;
+
+#define MAX 5
+int queue[MAX], front = 0, rear = 0, count = 0;
+
+// Check if empty
+bool isEmpty() { return count == 0; }
+
+// Check if full
+bool isFull() { return count == MAX; }
+
+// Add job
+void enqueue(int job) {
+    if (isFull()) { cout << "Queue full!" << endl; return; }
+    queue[rear] = job;
+    rear = (rear + 1) % MAX;
+    count++;
+    cout << "Added: " << job << endl;
+}
+
+// Remove job
+void dequeue() {
+    if (isEmpty()) { cout << "Queue empty!" << endl; return; }
+    cout << "Processed: " << queue[front] << endl;
+    front = (front + 1) % MAX;
+    count--;
+}
+
+// Check front job
+void frontJob() {
+    if (isEmpty()) cout << "Queue empty!" << endl;
+    else cout << "Front job: " << queue[front] << endl;
+}
+
+// Current job count
+void jobCount() { cout << "Jobs in queue: " << count << endl; }
+
+int main() {
+    int choice, job;
+    while (true) {
+        cout << "\n 1.Enqueue \n 2.Dequeue \n 3.Front \n 4.Count \n 5.Exit \n Enter your Choice: ";
+        cin >> choice;
+        if (choice == 1) { cout << "Job: "; cin >> job; enqueue(job); }
+        else if (choice == 2) dequeue();
+        else if (choice == 3) frontJob();
+        else if (choice == 4) jobCount();
+        else break;
+    }
+}
