@@ -3,291 +3,67 @@
 using namespace std;
 
 struct Node {
-    string prn;
+    int prn;
     string name;
     Node* next;
-
-    Node(string p, string n, Node* nxt = nullptr) {
-        prn = p;
-        name = n;
-        next = nxt;
-    }
 };
 
-class PinnacleClub {
-    Node* head;
+// Add member at end
+Node* addMember(Node* head, int prn, string name) {
+    Node* temp = new Node{prn, name, NULL};
+    if (!head) return temp;
+    Node* p = head;
+    while (p->next) p = p->next;
+    p->next = temp;
+    return head;
+}
 
-public:
-    PinnacleClub() {
-        head = nullptr;
-    }
+// Delete member by PRN
+Node* deleteMember(Node* head, int prn) {
+    if (!head) return NULL;
+    if (head->prn == prn) { Node* t = head->next; delete head; return t; }
+    Node* p = head;
+    while (p->next && p->next->prn != prn) p = p->next;
+    if (p->next) { Node* t = p->next; p->next = t->next; delete t; }
+    return head;
+}
 
-    void addPresident(string prn, string name) {
-        if (head != nullptr) {
-            cout << "President already exists!\n";
-            return;
-        }
-        Node* temp = new Node(prn, name);
-        head = temp;
-        cout << "President added.\n";
-    }
+// Count members
+int countMembers(Node* head) {
+    int c = 0; while (head) { c++; head = head->next; } return c;
+}
 
-    void addSecretary(string prn, string name) {
-        if (head == nullptr) {
-            cout << "First add President.\n";
-            return;
-        }
-        Node* temp = head;
-        while (temp->next != nullptr) {
-            temp = temp->next;
-        }
-        Node* sec = new Node(prn, name);
-        temp->next = sec;
-        cout << "Secretary added.\n";
-    }
+// Display members
+void displayMembers(Node* head) {
+    while (head) { cout << head->prn << " - " << head->name << endl; head = head->next; }
+}
 
-    void addMember(string prn, string name) {
-        if (head == nullptr) {
-            cout << "First add President.\n";
-            return;
-        }
-        Node* temp = head;
-        while (temp->next->next != nullptr) {
-            temp = temp->next;
-        }
-        Node* member = new Node(prn, name, temp->next);
-        temp->next = member;
-        cout << "Member added.\n";
-    }
-
-    void deletePresident() {
-        if (head == nullptr) {
-            cout << "No President found.\n";
-            return;
-        }
-        Node* temp = head;
-        head = head->next;
-        delete temp;
-        cout << "President deleted.\n";
-    }
-
-    void deleteSecretary() {
-        if (head == nullptr || head->next == nullptr) {
-            cout << "No Secretary found.\n";
-            return;
-        }
-        Node* temp = head;
-        while (temp->next->next != nullptr) {
-            temp = temp->next;
-        }
-        delete temp->next;
-        temp->next = nullptr;
-        cout << "Secretary deleted.\n";
-    }
-
-    void deleteMember(string prn) {
-        if (head == nullptr || head->next == nullptr || head->next->next == nullptr) {
-            cout << "No members found.\n";
-            return;
-        }
-        Node* temp = head;
-        while (temp->next != nullptr && temp->next->prn != prn) {
-            temp = temp->next;
-        }
-        if (temp->next == nullptr) {
-            cout << "Member not found.\n";
-            return;
-        }
-        Node* del = temp->next;
-        temp->next = del->next;
-        delete del;
-        cout << "Member deleted.\n";
-    }
-
-    void display() {
-        if (head == nullptr) {
-            cout << "No members in the club.\n";
-            return;
-        }
-        Node* temp = head;
-        cout << "\nClub Members:\n";
-        while (temp != nullptr) {
-            cout << temp->prn << " - " << temp->name << endl;
-            temp = temp->next;
-        }
-    }
-
-    int countMembers() {
-        int count = 0;
-        Node* temp = head;
-        while (temp != nullptr) {
-            count++;
-            temp = temp->next;
-        }
-        return count;
-    }
-
-    void concatenate(PinnacleClub& other) {
-        if (head == nullptr) {
-            head = other.head;
-            return;
-        }
-        Node* temp = head;
-        while (temp->next != nullptr) {
-            temp = temp->next;
-        }
-        temp->next = other.head;
-        other.head = nullptr;
-        cout << "Lists concatenated.\n";
-    }
-};
+// Concatenate two lists
+Node* concatenate(Node* head1, Node* head2) {
+    if (!head1) return head2;
+    Node* p = head1;
+    while (p->next) p = p->next;
+    p->next = head2;
+    return head1;
+}
 
 int main() {
-    PinnacleClub divA, divB;
-    int choice;
-    string prn, name;
+    Node *div1 = NULL, *div2 = NULL;
+    int choice, prn;
+    string name;
 
-    do {
-        cout << "\n--- Pinnacle Club Menu ---\n";
-        cout << "1. Add President\n2. Add Secretary\n3. Add Member\n4. Delete President\n";
-        cout << "5. Delete Secretary\n6. Delete Member\n7. Display Members\n";
-        cout << "8. Count Members\n9. Concatenate Div A & Div B\n10. Exit\n";
-        cout << "Enter choice: ";
+    while (true) {
+        cout << "\n1.Add Div1 2.Add Div2 3.Delete Div1 4.Delete Div2 5.Display Div1 6.Display Div2 7.Count Div1 8.Count Div2 9.Concatenate 10.Exit\nChoice: ";
         cin >> choice;
-
-        switch (choice) {
-        case 1:
-            cout << "Enter PRN & Name: ";
-            cin >> prn >> name;
-            divA.addPresident(prn, name);
-            break;
-        case 2:
-            cout << "Enter PRN & Name: ";
-            cin >> prn >> name;
-            divA.addSecretary(prn, name);
-            break;
-        case 3:
-            cout << "Enter PRN & Name: ";
-            cin >> prn >> name;
-            divA.addMember(prn, name);
-            break;
-        case 4:
-            divA.deletePresident();
-            break;
-        case 5:
-            divA.deleteSecretary();
-            break;
-        case 6:
-            cout << "Enter PRN of member to delete: ";
-            cin >> prn;
-            divA.deleteMember(prn);
-            break;
-        case 7:
-            divA.display();
-            break;
-        case 8:
-            cout << "Total Members: " << divA.countMembers() << endl;
-            break;
-        case 9:
-            cout << "Enter Division B members (end with 0):\n";
-            while (true) {
-                cout << "Enter PRN (0 to stop): ";
-                cin >> prn;
-                if (prn == "0") break;
-                cout << "Enter Name: ";
-                cin >> name;
-                divB.addMember(prn, name);
-            }
-            divA.concatenate(divB);
-            break;
-        case 10:
-            cout << "Exiting...\n";
-            break;
-        default:
-            cout << "Invalid choice.\n";
-        }
-    } while (choice != 10);
-
-    return 0;
+        if (choice == 1) { cout << "PRN: "; cin >> prn; cout << "Name: "; cin >> name; div1 = addMember(div1, prn, name); }
+        else if (choice == 2) { cout << "PRN: "; cin >> prn; cout << "Name: "; cin >> name; div2 = addMember(div2, prn, name); }
+        else if (choice == 3) { cout << "PRN to delete: "; cin >> prn; div1 = deleteMember(div1, prn); }
+        else if (choice == 4) { cout << "PRN to delete: "; cin >> prn; div2 = deleteMember(div2, prn); }
+        else if (choice == 5) displayMembers(div1);
+        else if (choice == 6) displayMembers(div2);
+        else if (choice == 7) cout << "Total Div1: " << countMembers(div1) << endl;
+        else if (choice == 8) cout << "Total Div2: " << countMembers(div2) << endl;
+        else if (choice == 9) { div1 = concatenate(div1, div2); cout << "Lists concatenated.\n"; }
+        else break;
+    }
 }
-Sample Input and Output-
---- Pinnacle Club Menu ---
-1. Add President
-2. Add Secretary
-3. Add Member
-4. Delete President
-5. Delete Secretary
-6. Delete Member
-7. Display Members
-8. Count Members
-9. Concatenate Div A & Div B
-10. Exit
-Enter choice: 1
-Enter PRN & Name: 101 Tanvi
-President added.
-
---- Pinnacle Club Menu ---
-Enter choice: 3
-Enter PRN & Name: 102 Riya
-Member added.
-
---- Pinnacle Club Menu ---
-Enter choice: 3
-Enter PRN & Name: 103 Aarav
-Member added.
-
---- Pinnacle Club Menu ---
-Enter choice: 2
-Enter PRN & Name: 104 Karan
-Secretary added.
-
---- Pinnacle Club Menu ---
-Enter choice: 7
-
-Club Members:
-101 – Tanvi
-102 – Riya
-103 – Aarav
-104 – Karan
-
---- Pinnacle Club Menu ---
-Enter choice: 8
-Total Members: 4
-
---- Pinnacle Club Menu ---
-Enter choice: 6
-Enter PRN of member to delete: 102
-Member deleted.
-
---- Pinnacle Club Menu ---
-Enter choice: 7
-
-Club Members:
-101 – Tanvi
-103 – Aarav
-104 – Karan
-
---- Pinnacle Club Menu ---
-Enter choice: 9
-Enter Division B members (end with 0):
-Enter PRN (0 to stop): 201
-Enter Name: Priya
-Enter PRN (0 to stop): 202
-Enter Name: Rahul
-Enter PRN (0 to stop): 0
-Lists concatenated.
-
---- Pinnacle Club Menu ---
-Enter choice: 7
-
-Club Members:
-101 – Tanvi
-103 – Aarav
-104 – Karan
-201 – Priya
-202 – Rahul
-
---- Pinnacle Club Menu ---
-Enter choice: 10
-Exiting...
-
