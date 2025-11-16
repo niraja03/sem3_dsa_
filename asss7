@@ -1,0 +1,26 @@
+# If a name has length 4, it goes into bucket index 4.
+
+names = ["John", "Alexander", "Paul", "Victoria", "Mary", "Charles", "Elizabeth"]
+
+# 1) Find biggest length
+maxlen = 0
+for n in names:
+    if len(n) > maxlen:
+        maxlen = len(n)
+
+# 2) Make empty buckets
+buckets = []
+for i in range(maxlen + 1):
+    buckets.append([])
+
+# 3) Put each name in bucket of its length
+for n in names:
+    buckets[len(n)].append(n)
+
+# 4) Take names out from small length to big length
+sorted_list = []
+for b in buckets:
+    for name in b:
+        sorted_list.append(name)
+
+print("Sorted by length:", sorted_list)
