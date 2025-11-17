@@ -1,45 +1,36 @@
 #include <iostream>
 using namespace std;
 
-#define MAX 100
+string undoStack[50], redoStack[50];
+int uTop = -1, rTop = -1;
 
-class UndoRedo {
-    string undoStack[MAX];
-    string redoStack[MAX];
-    int topUndo = -1;
-    int topRedo = -1;
+void addOp(string op){
+    undoStack[++uTop] = op;
+    rTop = -1;
+}
 
-public:
-    void addOperation(string op) {
-        undoStack[++topUndo] = op; // push to undo
-        topRedo = -1;              // clear redo
-        cout << "Added: " << op << endl;
+void undo(){
+    if(uTop < 0) cout << "Nothing to undo\n";
+    else redoStack[++rTop] = undoStack[uTop--];
+}
+
+void redo(){
+    if(rTop < 0) cout << "Nothing to redo\n";
+    else undoStack[++uTop] = redoStack[rTop--];
+}
+
+int main(){
+    int c; string op;
+    while(1){
+        cout << "1.Add 2.Undo 3.Redo 4.Exit: ";
+        cin >> c;
+
+        if(c==1){
+            cin >> op;
+            addOp(op);
+        }
+        else if(c==2) undo();
+        else if(c==3) redo();
+        else break;
     }
-
-    void undo() {
-        if (topUndo < 0) { cout << "Nothing to undo\n"; return; }
-        string op = undoStack[topUndo--]; // pop from undo
-        redoStack[++topRedo] = op;        // push to redo
-        cout << "Undo: " << op << endl;
-    }
-
-    void redo() {
-        if (topRedo < 0) { cout << "Nothing to redo\n"; return; }
-        string op = redoStack[topRedo--]; // pop from redo
-        undoStack[++topUndo] = op;        // push back to undo
-        cout << "Redo: " << op << endl;
-    }
-};
-
-int main() {
-    UndoRedo editor;
-
-    editor.addOperation("Type A");
-    editor.addOperation("Type B");
-    editor.undo(); // Undo B
-    editor.redo(); // Redo B
-    editor.addOperation("Type C"); // clears redo
-    editor.undo(); // Undo C
-
-    return 0;
 }
